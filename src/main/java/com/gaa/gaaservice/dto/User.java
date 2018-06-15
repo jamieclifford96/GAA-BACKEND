@@ -3,6 +3,9 @@ package com.gaa.gaaservice.dto;
 public class User {
 	private String username, password;
 
+	public User() {
+		
+	}
 	public User(String username, String password) {
 		super();
 		this.username = username;

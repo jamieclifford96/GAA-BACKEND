@@ -3,10 +3,14 @@ package com.gaa.gaaservice.dto;
 import java.time.LocalDateTime;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-@XmlRootElement
+import com.gaa.gaaservice.adapters.LocalDateTimeAdapter;
+
+//@XmlRootElement
 public class Fixture {
 	private String venue, home, away, ref, group;
+	@XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
 	private LocalDateTime dateTime;
 	
 	public Fixture() {

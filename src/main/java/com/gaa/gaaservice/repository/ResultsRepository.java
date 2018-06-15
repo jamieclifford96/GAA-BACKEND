@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -57,7 +58,33 @@ public class ResultsRepository {
 		
 		return sqlResults;
 	}
+	public Result addResult(Result result){
+			
+			String sqlQuery = "INSERT INTO `gaa_club`.`results` (`dateTime`, `home`, `away`, `homeScore`, `awayScore`, `division`) VALUES (?,?,?,?,?,?)";
+			
+			try (Connection connection = DriverManager.getConnection(DB_URL,propObj);
+					PreparedStatement ps = connection.prepareStatement(sqlQuery);) {
+				
+				
+				
+				ps.setTimestamp(1, Timestamp.valueOf(result.getDateTime()));
+				ps.setString(2, result.getHome());
+				ps.setString(3, result.getAway());
+				ps.setString(4, result.getHomeScore());
+				ps.setString(5, result.getAwayScore());
+				ps.setString(6, result.getDivision());
 	
+				ps.execute();
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+			return result;
+		}
+
 	
 
 

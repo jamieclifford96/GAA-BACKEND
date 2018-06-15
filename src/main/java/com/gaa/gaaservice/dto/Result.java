@@ -2,14 +2,22 @@ package com.gaa.gaaservice.dto;
 
 import java.time.LocalDateTime;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlValue;
+
+@XmlRootElement
 public class Result {
+	
+	//@SerializedName("empID")
 	private String division, home, away, homeScore, awayScore;	
+	
+	
 	private LocalDateTime dateTime;
 		
 	
 	
-	public Result(String division, String home, String away, String homeScore, String awayScore,
-			LocalDateTime dateTime) {
+	public Result(String division, String home, String away, String homeScore, String awayScore
+			,LocalDateTime dateTime) {
 		this.division = division;
 		this.home = home;
 		this.away = away;

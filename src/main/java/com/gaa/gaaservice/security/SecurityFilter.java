@@ -25,8 +25,14 @@ public class SecurityFilter implements ContainerRequestFilter{
 	public void filter(ContainerRequestContext requestContext) throws IOException {
 		
 		// case of specific path needs auth use this:
-		//requestContext.getUriInfo().getPath().contains("some/path");
-
+		//boolean isUserPath = requestContext.getUriInfo().getPath().contains("user/");
+		
+		/*if(isUserPath && requestContext.getMethod().equals("POST"))
+		{
+			return;
+		}*/
+		
+		
 		List<String> authHeader = requestContext.getHeaders().get(AUTHORIZATION_HEADER_KEY);
 		
 		if( authHeader != null && authHeader.size() > 0) {
@@ -45,15 +51,27 @@ public class SecurityFilter implements ContainerRequestFilter{
 			if(user != null && user.getPassword().equals(password)) {
 				return;
 			}
+			else {
+
+				Response unauthorizedStatus = Response
+						.status(Response.Status.UNAUTHORIZED)
+						.entity("Username or password in incorect")
+						.build();
+
+				requestContext.abortWith(unauthorizedStatus);			
+			}
 			
 		}
+		else {
+			Response unauthorizedStatus = Response
+					.status(Response.Status.UNAUTHORIZED)
+					.entity("Invalid token")
+					.build();
+
+			requestContext.abortWith(unauthorizedStatus);
+		}
 		
-		Response unauthorizedStatus = Response
-										.status(Response.Status.UNAUTHORIZED)
-										.entity("User cannot access the resource.")
-										.build();
 		
-		requestContext.abortWith(unauthorizedStatus);
 		
 	}
 

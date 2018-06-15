@@ -1,5 +1,9 @@
 package com.gaa.gaaservice.resource;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,6 +15,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import com.gaa.gaaservice.dto.Fixture;
 import com.gaa.gaaservice.repository.FixtureRepository;
@@ -43,10 +48,15 @@ public class FixtureResource {
 	@POST
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Fixture addFixture(Fixture fixture) {
+    public Response addFixture(Fixture fixture) {
+		// validate the fixture -> if wrong complain
+		// check if exists in db -> complain
+		// othervice save
 		
 		
-		
-        return fixture;
+			repo.addFicture(fixture);
+			return Response.ok(fixture).build();
     }
 }
+
+
