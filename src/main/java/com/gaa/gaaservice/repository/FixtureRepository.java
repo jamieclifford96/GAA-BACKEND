@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -72,9 +73,9 @@ public class FixtureRepository {
 			ps.setString(3, fixture.getAway());
 			ps.setString(4, fixture.getRef());
 			ps.setString(5, fixture.getGroup());
-			//ps.setDate(6, fixture.getDateTime().);
-
-			ps.setDate(6, (java.sql.Date) new Date());
+			ps.setTimestamp(6, Timestamp.valueOf(fixture.getDateTime()));
+			
+			ps.execute();
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
