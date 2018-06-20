@@ -42,7 +42,7 @@ public class UserRepository {
 				user = new User(rs.getString("username"), rs.getString("password"));
 			}
 			
-			
+			 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
