@@ -4,6 +4,7 @@ package com.gaa.gaaservice.dto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.sql.Date;
+import java.sql.Time;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -15,8 +16,7 @@ public class Booking {
 
 	private String id;
 	private String team;
-	
-	
+	private Time time;
 	private LocalDate datetime;
 	
 	private String  pitch;
@@ -24,12 +24,13 @@ public class Booking {
 	public Booking() {
 		
 	}
-	public Booking(String id, String team, LocalDate datetime, String pitch) {
+	public Booking(String id, String team, LocalDate datetime, String pitch, Time time) {
 		super();
 		this.id = id;
 		this.team = team;
 		this.datetime = datetime;
 		this.pitch = pitch;
+		this.time = time;
 	}
 	
 	/**
@@ -84,6 +85,12 @@ public class Booking {
 	 */
 	public void setPitch(String pitch) {
 		this.pitch = pitch;
+	}
+	public Time getTime() {
+		return time;
+	}
+	public void setTime(Time time) {
+		this.time = time;
 	}
 	
 	

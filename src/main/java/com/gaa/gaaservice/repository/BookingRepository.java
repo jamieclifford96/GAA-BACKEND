@@ -1,5 +1,6 @@
 package com.gaa.gaaservice.repository;
 
+import org.json.*;
 import java.io.Console;
 import java.sql.Connection;
 import java.sql.Date;
@@ -8,10 +9,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -58,26 +61,42 @@ public class BookingRepository {
 		return sqlBookings;
 	}
 	
-	public Booking addBooking(Booking booking){
+	public Booking addBooking(String booking){
 		
 		System.out.println(booking.toString());
-		String sqlQuery = "INSERT INTO `gaa_club`.`bookings` (`id`,`datetime`, `team`, `pitch`) VALUES (?,?,?,?)";
-		
+		String sqlQuery = "INSERT INTO `gaa_club`.`bookings` (`id`,`datetime`, `team`, `pitch`, `time`) VALUES (?,?,?,?,?)";
+		Booking completeBooking = new Booking();
 		try (Connection connection = DriverManager.getConnection(DB_URL,propObj);
 				PreparedStatement ps = connection.prepareStatement(sqlQuery);) {
 			
+			JSONObject obj = new JSONObject(booking);
 			
-			//java.sql.Date sqlDate = java.sql.Date.valueOf(booking.getdate());
+			String id = obj.getString("id");
+			String date = obj.getString("date");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			LocalDate datetime = LocalDate.parse(date, formatter) ;
+			String team = obj.getString("team");
+			String pitch = obj.getString("pitch");
+			Time time = java.sql.Time.valueOf(obj.getString("time"));
+			
+			
+			java.sql.Date sqlDate = java.sql.Date.valueOf(datetime);
 			
 			/*if(sqlDate == null)
 			{
 				System.out.println("NULLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
 			}*/
+			completeBooking.setDate(datetime);
+			completeBooking.setId(id);
+			completeBooking.setPitch(pitch);
+			completeBooking.setTeam(team);
+			completeBooking.setTime(time);
 			
-			ps.setString(1, booking.getId());
-			ps.setObject(2, booking.getDate());
-			ps.setString(3, booking.getTeam());
-			ps.setString(4, booking.getPitch());
+			ps.setString(1, id);
+			ps.setObject(2, sqlDate);
+			ps.setString(3, team);
+			ps.setString(4, pitch);
+			ps.setTime(5, time);
 			
 			ps.execute();
 			
@@ -87,12 +106,13 @@ public class BookingRepository {
 		}
 		
 		
-		return booking;
+ 		
+		return completeBooking;
 	}
 
-	public Fixture getFicture(int id) {
+	public Booking[] getBookingsByDate() {
 		// TODO Auto-generated method stub
-		return new Fixture("St Annes Park", "Raheny", "Trinity Gaels", "Dave Moore", "Adult Hurling League Division Seven "+id, LocalDateTime.of(2018, 5, 4, 7, 00, 00));
+		
 	}
 
 }

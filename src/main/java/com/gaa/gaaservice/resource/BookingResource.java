@@ -30,8 +30,8 @@ BookingRepository repo = new BookingRepository();
 
 	@POST
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	public Response addBooking(Booking booking) {
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	public Response addBooking(String booking) {
 		
 	
 		
