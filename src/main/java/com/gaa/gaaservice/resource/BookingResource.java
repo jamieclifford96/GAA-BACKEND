@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.gaa.gaaservice.dto.Booking;
+import com.gaa.gaaservice.dto.Fixture;
 import com.gaa.gaaservice.repository.BookingRepository;
 
 @Path("booking")
@@ -24,7 +25,16 @@ BookingRepository repo = new BookingRepository();
 		
         return repo.getBooking();
     }
-
+	@POST
+	@Path("date")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public List<Booking> getBookingsByDate(String json) {
+		
+		
+		
+        return repo.getBookingsByDate(json);
+    }
 	
 	
 
@@ -32,9 +42,6 @@ BookingRepository repo = new BookingRepository();
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public Response addBooking(String booking) {
-		
-	
-		
 		
 			repo.addBooking(booking);
 			return Response.ok(booking).build();

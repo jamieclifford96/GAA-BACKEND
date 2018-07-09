@@ -38,7 +38,7 @@ public class BookingRepository {
 		
 		List<Booking> sqlBookings = new ArrayList<>();
 		
-		String sqlQuery = "SELECT `bookings`.`id`,`bookings`.`team`,`bookings`.`datetime`,`bookings`.`pitch`,FROM `gaa_club`.`bookings`;";
+		String sqlQuery = "SELECT `bookings`.`id`,`bookings`.`team`,`bookings`.`datetime`,`bookings`.`pitch`,`bookings`.`time`  FROM `gaa_club`.`bookings`;";
 		
 		try (Connection connection = DriverManager.getConnection(DB_URL,propObj);
 				Statement st = connection.createStatement();
@@ -48,8 +48,42 @@ public class BookingRepository {
 				Booking booking = new Booking();
 				booking.setId(rs.getString("id"));
 				booking.setTeam(rs.getString("team"));
-				booking.setDate(rs.getDate("date").toLocalDate());
+				booking.setDatetime(rs.getString("datetime"));
 				booking.setPitch(rs.getString("pitch"));
+				booking.setTime(rs.getString("time"));
+				sqlBookings.add(booking);
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		
+		return sqlBookings;
+	}
+	public List<Booking> getBookingsByDate(String json){
+		List<Booking> sqlBookings = new ArrayList<>();
+		
+
+		JSONObject obj = new JSONObject(json);
+		
+		String sqldate = obj.getString("date");
+		String pitch = obj.getString("pitch");
+		String pitch1 = "\"" + pitch + "\""; 
+		String sqldate1 = "\""+ sqldate +"\"";
+		String sqlQuery = "SELECT `bookings`.`id`,`bookings`.`team`,`bookings`.`datetime`,`bookings`.`pitch`, `bookings`.`time` FROM `gaa_club`.`bookings` WHERE `bookings`.`datetime` ="+ sqldate1+ "&& `bookings`.`pitch` ="+ pitch1 +";";
+		
+		try (Connection connection = DriverManager.getConnection(DB_URL,propObj);
+				Statement st = connection.createStatement();
+				ResultSet rs = st.executeQuery(sqlQuery);) {
+			
+			while (rs.next()) {
+				Booking booking = new Booking();
+				booking.setId(rs.getString("id"));
+				booking.setTeam(rs.getString("team"));
+				booking.setDatetime(rs.getString("datetime"));
+				booking.setPitch(rs.getString("pitch"));
+				booking.setTime(rs.getString("time"));
 				sqlBookings.add(booking);
 			}
 			
@@ -72,31 +106,30 @@ public class BookingRepository {
 			JSONObject obj = new JSONObject(booking);
 			
 			String id = obj.getString("id");
-			String date = obj.getString("date");
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			LocalDate datetime = LocalDate.parse(date, formatter) ;
+			String datetime = obj.getString("datetime");
+			//DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			String team = obj.getString("team");
 			String pitch = obj.getString("pitch");
-			Time time = java.sql.Time.valueOf(obj.getString("time"));
+			String time = obj.getString("time");
 			
 			
-			java.sql.Date sqlDate = java.sql.Date.valueOf(datetime);
+			//java.sql.Date sqlDate = java.sql.Date.valueOf(datetime);
 			
 			/*if(sqlDate == null)
 			{
 				System.out.println("NULLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
 			}*/
-			completeBooking.setDate(datetime);
+			completeBooking.setDatetime(datetime);
 			completeBooking.setId(id);
-			completeBooking.setPitch(pitch);
 			completeBooking.setTeam(team);
+			completeBooking.setPitch(pitch);
 			completeBooking.setTime(time);
 			
 			ps.setString(1, id);
-			ps.setObject(2, sqlDate);
+			ps.setString(2, datetime);
 			ps.setString(3, team);
 			ps.setString(4, pitch);
-			ps.setTime(5, time);
+			ps.setString(5, time);
 			
 			ps.execute();
 			
@@ -108,11 +141,6 @@ public class BookingRepository {
 		
  		
 		return completeBooking;
-	}
-
-	public Booking[] getBookingsByDate() {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

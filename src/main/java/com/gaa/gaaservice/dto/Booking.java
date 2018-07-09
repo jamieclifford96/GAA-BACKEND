@@ -16,15 +16,15 @@ public class Booking {
 
 	private String id;
 	private String team;
-	private Time time;
-	private LocalDate datetime;
+	private String time;
+	private String datetime;
 	
 	private String  pitch;
 	
 	public Booking() {
 		
 	}
-	public Booking(String id, String team, LocalDate datetime, String pitch, Time time) {
+	public Booking(String id, String team, String datetime, String pitch, String time) {
 		super();
 		this.id = id;
 		this.team = team;
@@ -49,14 +49,14 @@ public class Booking {
 	 * @return the time and date
 	 */	
 	@XmlJavaTypeAdapter(LocalDateAdapter.class)
-	public LocalDate getDate() {
+	public String getDatetime() {
 		return datetime;
 	}
 	/**
 	 * @param  the time and date to set
 	 */
-	public void setDate(LocalDate date ) {
-		this.datetime= date;
+	public void setDatetime(String datetime ) {
+		this.datetime= datetime;
 	}
 	@Override
 	public String toString() {
@@ -86,11 +86,11 @@ public class Booking {
 	public void setPitch(String pitch) {
 		this.pitch = pitch;
 	}
-	public Time getTime() {
+	public String getTime() {
 		return time;
 	}
-	public void setTime(Time time) {
-		this.time = time;
+	public void setTime(String string) {
+		this.time = string;
 	}
 	
 	
