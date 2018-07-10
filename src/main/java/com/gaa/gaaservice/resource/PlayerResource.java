@@ -38,6 +38,16 @@ PlayerRepository repo = new PlayerRepository();
         return repo.getPlayerByFullName(json);
     }
 	@POST
+	@Path("team")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public List<Player> getPlayerByTeam(String json) {
+		
+		
+		
+        return repo.getPlayerByTeam(json);
+    }
+	@POST
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public Response addPlayer(String player) {

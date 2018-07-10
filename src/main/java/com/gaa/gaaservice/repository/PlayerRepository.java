@@ -63,15 +63,19 @@ public class PlayerRepository {
 	}
 	
 public Player getPlayerByFullName(String fullname){		
-		
-	String[] parts = fullname.split(" ");
+	
+	JSONObject obj = new JSONObject(fullname);
+	
+	String fullname1 = obj.getString("fullname");
+	
+	String[] parts = fullname1.split(" ");
 	String first = parts[0];
 	String last = parts[1];
 	
 	Player player = new Player();
 
 		
-		String sqlQuery = "SELECT `players`.`firstName`,`players`.`lastName`,`players`.`team` FROM `gaa_club`.`players` WHERE `players`.`firstName` =" + first +" && `players`.`lastName` =" + last + ";";
+		String sqlQuery = "SELECT `players`.`firstName`,`players`.`lastName`,`players`.`team` FROM `gaa_club`.`players` WHERE `players`.`firstName` =" + "\"" + first + "\""+  " AND `players`.`lastName` =" + "\"" + last+ "\"" + ";";
 		
 		try (Connection connection = DriverManager.getConnection(DB_URL,propObj);
 				Statement st = connection.createStatement();
@@ -90,6 +94,36 @@ public Player getPlayerByFullName(String fullname){
 		}		
 		
 		return player;
+	}
+public List<Player> getPlayerByTeam(String team){		
+
+	JSONObject obj = new JSONObject(team);
+	
+	String team1 = obj.getString("team");
+	
+	
+	List<Player> sqlPlayers = new ArrayList<>();
+		
+		String sqlQuery = "SELECT `players`.`firstName`,`players`.`lastName`,`players`.`team` FROM `gaa_club`.`players` WHERE `players`.`team` =" + "\"" + team1 + "\"" +";";
+		
+		try (Connection connection = DriverManager.getConnection(DB_URL,propObj);
+				Statement st = connection.createStatement();
+				ResultSet rs = st.executeQuery(sqlQuery);) {
+			
+			while (rs.next()) {
+				Player player = new Player();
+				player.setFirstname(rs.getString("firstName"));
+				player.setLastname(rs.getString("lastName"));
+				player.setTeam(rs.getString("team"));
+				sqlPlayers.add(player);
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		
+		return sqlPlayers;
 	}
 	
 	public Player addPlayer(String player){

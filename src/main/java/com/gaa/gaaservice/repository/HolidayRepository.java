@@ -81,7 +81,7 @@ public Holiday addHoliday(String holiday){
 		
 		String playerName = first + " " + last;
 		
-		String playerQuery = "SELECT `players`.`firstName`,`players`.`lastName`,`players`.`team` FROM `gaa_club`.`players` WHERE `players`.`firstName` =" + first +" && `players`.`lastName` =" + last + ";";
+		String playerQuery = "SELECT `players`.`firstName`,`players`.`lastName`,`players`.`team` FROM `gaa_club`.`players` WHERE `players`.`firstName` =" + "\"" + first + "\""+  " AND `players`.`lastName` =" + "\"" + last+ "\"" + ";";
 		try (Connection connection = DriverManager.getConnection(DB_URL,propObj);
 				Statement st = connection.createStatement();
 				ResultSet rs = st.executeQuery(playerQuery);) {
